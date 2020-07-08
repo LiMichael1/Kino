@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://starlordmike:borg7711@contactkeeper-tzaaw.mongodb.net/Kino?retryWrites=true&w=majority",
+  "jwtSecret": "Kinophile"
+}

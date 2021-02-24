@@ -1,7 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://starlordmike:borg7711@contactkeeper-tzaaw.mongodb.net/Kino?retryWrites=true&w=majority",
-  "jwtSecret": "Kinophile",
-  "tmdb_apikey": "e303bacd98bdfe6244014f8c8f687ec9",
-  "tmdb_api-read-only": "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMzAzYmFjZDk4YmRmZTYyNDQwMTRmOGM4ZjY4N2VjOSIsInN1YiI6IjVmMDM5ODk5MTFjMDY2MDAzOWI1ZTQ4ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Cmkb07Z3kpnXPydUFP8tHXwrrKXvIf41Uncs6lVTRek",
-  "fandango_apikey": "x83p5sz794gmhu4n4bzhg7qt"
-}

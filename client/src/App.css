@@ -1,0 +1,77 @@
+/* Global Styles */
+:root {
+  --primary-color: #37005e;
+  --dark-color: #0e0d0d;
+  --light-color: #f4f4f4;
+  --danger-color: #dc3545;
+  --success-color: #28a745;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--success-color);
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--primary-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+.navbar ul {
+  display: flex;
+  list-style: none;
+}
+
+.navbar a {
+  color: var(--light-color);
+  text-decoration: none;
+}
+
+.links {
+  font-size: 1.2rem;
+  padding: 0.5rem;
+}
+
+.links:hover {
+  color: var(--success-color);
+}
+
+.logo-text {
+  font-family: cursive;
+  /* text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff073a, 0 0 40px red,
+    0 0 80px red, 0 0 90px red; */
+}
+
+#main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.kino {
+  width: 200px;
+  margin: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.kino img {
+  width: 100%;
+  border-radius: 30px;
+}
+
+.kino-info {
+  color: var(--light-color);
+  text-align: center;
+  letter-spacing: 0.5px;
+}

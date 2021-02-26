@@ -1,12 +1,26 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import AuthContext from '../../context/auth/authContext';
 
 const Navbar = () => {
-  const isAuthenticated = false;
+  const authContext = useContext(AuthContext);
+
+  const { isAuthenticated, logout, user } = authContext;
+
+  const username = user && user.username;
 
   const authLinks = (
     <Fragment>
-      <a>Logged In</a>
+      <li>
+        <Link to={`/u/${username}`} className='links'>
+          {username}
+        </Link>
+      </li>
+      <li>
+        <a onClick={logout} href='/' className='links'>
+          Logout
+        </a>
+      </li>
     </Fragment>
   );
 

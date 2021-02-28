@@ -1,6 +1,7 @@
 import React, { Fragment, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../context/auth/authContext';
+import SearchBar from './SearchBar';
 
 const Navbar = () => {
   const authContext = useContext(AuthContext);
@@ -44,6 +45,7 @@ const Navbar = () => {
       <h1 className='logo-text'>
         <Link to='/'>Kino</Link>
       </h1>
+      <SearchBar />
       <ul>{isAuthenticated ? authLinks : guestLinks}</ul>
     </div>
   );

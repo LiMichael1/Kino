@@ -6,6 +6,8 @@ import About from './components/pages/About';
 import Footer from './components/layout/Footer';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
+import Kino from './components/kino/Kino';
+import User from './components/pages/User';
 
 import AuthState from './context/auth/AuthState';
 
@@ -27,6 +29,8 @@ const App = () => {
             <Route exact path='/about' component={About} />
             <Route exact path='/register' component={Register} />
             <Route exact path='/login' component={Login} />
+            <Route exact path='/m/:movie' component={Kino} />
+            <Route exact path='/u/:username' component={User} />
           </Switch>
           <Footer />
         </Fragment>

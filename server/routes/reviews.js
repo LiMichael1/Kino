@@ -18,7 +18,6 @@ router.post(
       check('movie_name', 'Movie Required').not().isEmpty(),
       check('movieId', 'Movie required').not().isEmpty(),
       check('poster_path', 'No Poster').not().isEmpty(),
-      check('date', 'No Date?').not().isEmpty(),
       check('rating', 'Rating is required').not().isEmpty(),
       check('text_header', 'Please put a review header').not().isEmpty(),
       check('text_body', 'Review body is empty').not().isEmpty(),
@@ -40,6 +39,18 @@ router.post(
       text_body,
     } = req.body;
     try {
+      let findReview = await Review.findOne({
+        movieId: movieId,
+        user: req.user.id,
+      });
+
+      if (findReview) {
+        res
+          .status(409)
+          .json({ error: 'User already has review of this movie' });
+        return;
+      }
+
       let findKino = await Kino.findOne({ movieId }).lean();
 
       if (!findKino) {
@@ -179,14 +190,53 @@ router.post('/r/:id', auth, async (req, res) => {
   }
 });
 
-// @route     Get api/reviews/m/:movie
+// @route     Get api/reviews/m/:movieId
 // @desc      Get a list of reviews from a movie
 // @access    Public
-router.get('/m/:id', async (req, res) => {
+router.get('/m/:movieId', async (req, res) => {
   try {
-    let reviews = await Review.find({ movieId: req.params.id }).lean();
+    let reviews = await Review.find({ movieId: req.params.movieId }).lean();
 
-    res.json(reviews);
+    res.status(200).json(reviews);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
+// @route     Get api/reviews/mu/:movieId
+// @desc      Get single review from user
+// @access    Private
+router.get('/mu/:movieId', [auth], async (req, res) => {
+  try {
+    let userReview = await Review.findOne({
+      movieId: req.params.movieId,
+      user: req.user.id,
+    });
+
+    if (userReview) {
+      res.status(200).json(userReview);
+    } else {
+      res.status(404).json({ msg: 'Review not found' });
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
+// @route     Get api/reviews/u
+// @desc      Get all reviews from user
+// @access    Public
+router.get('/u/:username', async (req, res) => {
+  try {
+    let userReviews = await Review.find({ username: req.params.username });
+
+    if (userReviews) {
+      res.status(200).json(userReviews);
+    } else {
+      res.status(404).json({ msg: 'No User Reviews' });
+    }
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ msg: 'Server Error' });

@@ -4,12 +4,10 @@ import Spinner from '../layout/Spinner';
 import AuthContext from '../../context/auth/authContext';
 import axios from 'axios';
 
-const Reviews = (props) => {
+const Reviews = ({ movieId, needPic }) => {
   const [loading, setLoading] = useState(false);
   const [reviews, setReviews] = useState([]);
   const authContext = useContext(AuthContext);
-
-  const { movieId } = props;
 
   const { isAuthenticated, user } = authContext;
 
@@ -50,10 +48,10 @@ const Reviews = (props) => {
 
   return (
     <Fragment>
-      {!loading ? (
-        <div>
+      {!loading && reviews.length > 0 ? (
+        <div className='container px-5'>
           {reviews.map((review) => (
-            <ReviewItem review={review} key={review._id} />
+            <ReviewItem review={review} key={review._id} needPic={needPic} />
           ))}
         </div>
       ) : (

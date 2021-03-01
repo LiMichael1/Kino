@@ -1,14 +1,23 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AuthContext from '../../context/auth/authContext';
+import AlertContext from '../../context/alert/alertContext';
 
 const Login = (props) => {
+  const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
+
+  const { setAlert } = alertContext;
 
   const { login, error, clearErrors, isAuthenticated } = authContext;
 
   useEffect(() => {
     if (isAuthenticated) props.history.push('/');
-  }, [isAuthenticated]);
+
+    if (error === 'Invalid Credientials') {
+      setAlert(error, 'danger');
+      clearErrors();
+    }
+  }, [isAuthenticated, error, props.history]);
 
   const [user, setUser] = useState({
     email: '',
@@ -23,6 +32,7 @@ const Login = (props) => {
     e.preventDefault();
     if (email === '' || password === '') {
       // Alert: One of the fields is Empty
+      setAlert('Please fill in all fields', 'danger');
     } else {
       // Login User
       login({
@@ -34,33 +44,54 @@ const Login = (props) => {
 
   return (
     <div className='form-container'>
-      <h1>
-        Account Login
-        <form onSubmit={onSubmit}>
-          <div className='form-group'>
-            <label htmlFor='email'>Email Address</label>
-            <input
-              type='email'
-              name='email'
-              value={email}
-              onChange={onChange}
-              required
-            />
-          </div>
-          <div className='form-group'>
-            <label htmlFor='password'>Password</label>
-            <input
-              type='password'
-              name='password'
-              value={password}
-              onChange={onChange}
-              required
-            />
-          </div>
+      <div className='card'>
+        <div className='card-header'>Login</div>
+        <div className='card-body'>
+          <form onSubmit={onSubmit}>
+            <div className='form-group'>
+              <label htmlFor='email' className='col-form-label text-md-right'>
+                Email Address
+              </label>
+              <input
+                type='email'
+                name='email'
+                className='form-control'
+                value={email}
+                onChange={onChange}
+                required
+              />
+            </div>
+            <div className='form-group'>
+              <label
+                htmlFor='password'
+                className='col-form-label text-md-right'
+              >
+                Password
+              </label>
+              <input
+                type='password'
+                name='password'
+                className='form-control'
+                value={password}
+                onChange={onChange}
+                required
+              />
+            </div>
 
-          <input type='submit' value='Login' />
-        </form>
-      </h1>
+            <div className='form-group'>
+              <input
+                type='submit'
+                value='Login'
+                className='btn btn-primary d-block form-button'
+              />
+
+              <a href='/register' className='btn btn-link text-md-left'>
+                Forgot Your Password?
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

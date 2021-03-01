@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Quicksand&family=Rock+Salt&display=swap');
+
 /* Global Styles */
 :root {
-  --primary-color: #37005e;
+  --primary-color: #6441a5;
   --dark-color: #0e0d0d;
   --light-color: #f4f4f4;
   --danger-color: #dc3545;
@@ -9,12 +11,23 @@
 
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+}
+
+a,
+a:hover,
+a:focus,
+a:active {
+  text-decoration: none;
 }
 
 body {
-  background-color: var(--success-color);
+  background: linear-gradient(#2a0845, #6441a5) no-repeat fixed;
+}
+
+.cursive-glow-txt {
+  color: #4666ff !important;
+  text-shadow: 0 0 10px #4666ff, 0 0 20px #4666ff, 0 0 30px #4666ff;
+  font-family: 'Rock Salt', cursive !important;
 }
 
 /* Navbar */
@@ -23,8 +36,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  overflow: visible;
   padding: 1rem;
-  width: 100%;
 }
 
 .navbar ul {
@@ -32,24 +45,22 @@ body {
   list-style: none;
 }
 
-.navbar a {
+a.links {
   color: var(--light-color);
   text-decoration: none;
-}
-
-.links {
   font-size: 1.2rem;
   padding: 0.5rem;
 }
 
-.links:hover {
-  color: var(--success-color);
+a.links:hover {
+  opacity: 0.7 !important;
 }
 
-.logo-text {
-  font-family: cursive;
-  /* text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff073a, 0 0 40px red,
-    0 0 80px red, 0 0 90px red; */
+a.logo_text {
+  font-family: 'Permanent Marker', cursive;
+  color: white;
+  text-shadow: 0 0 20px #fff, 0 0 30px #4666ff, 0 0 40px #4666ff,
+    0 0 50px #4666ff, 0 0 60px #4666ff, 0 0 70px #4666ff, 0 0 80px #4666ff;
 }
 
 #main {
@@ -59,15 +70,45 @@ body {
 }
 
 .kino {
+  border-radius: 30px;
   width: 200px;
   margin: 1rem;
   position: relative;
   overflow: hidden;
 }
 
+.kino:hover {
+  box-shadow: 0 0 15px 5px #fff, 0 0 15px 10px #8a2be2;
+}
+
+.kino .after {
+  color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.kino:hover .after {
+  visibility: visible;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0.6;
+}
+
+.after p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+/* Kinos */
+
 .kino img {
   width: 100%;
-  border-radius: 30px;
 }
 
 .kino-info {
@@ -78,4 +119,78 @@ body {
 
 .kino-info span {
   display: block;
+}
+
+/* Review */
+.review {
+  background-color: #8a2be2;
+  box-shadow: 0 0 15px 5px #fff, 0 0 15px 10px #8a2be2;
+  border-radius: 10px;
+  margin: 40px auto;
+}
+
+.review a {
+  color: var(--light-color);
+  text-decoration: none;
+  font-family: cursive;
+}
+
+.review a:hover {
+  opacity: 0.7;
+}
+
+.review img {
+  width: 40%;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.review-header {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.review-info {
+  padding-left: 30px;
+  margin-top: 20px;
+}
+
+/* Form */
+.form-container {
+  max-width: 600px;
+  min-width: 320px;
+  margin: 20px auto 10px;
+}
+
+.form-button {
+  margin-left: 10px;
+}
+
+.big-image {
+  border-radius: 10px;
+  box-shadow: 0px 5px 5px -5px #000000;
+  max-height: 60vh;
+  margin: auto;
+}
+
+/* search bar */
+.autocomplete {
+  overflow: auto;
+  width: 40%;
+}
+
+.autocomplete-content {
+  position: absolute;
+  background-color: #eeeeee;
+  cursor: pointer;
+  z-index: 1;
+  width: 39%;
+}
+
+.autocomplete:focus .autocomplete-content {
+  display: block;
+}
+.search_bar {
+  display: flex;
+  flex-direction: row;
 }

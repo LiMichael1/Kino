@@ -12,9 +12,13 @@ const Kino = ({ match }) => {
   const [userHasReview, setUserHasReview] = useState(false);
 
   const authContext = useContext(AuthContext);
-  const { isAuthenticated } = authContext;
+  const { isAuthenticated, loadUser } = authContext;
 
   const { title, release_date, poster_path, overview, runtime } = kino;
+
+  useEffect(() => {
+    loadUser();
+  }, []);
 
   useEffect(() => {
     // api request for individual movie
@@ -101,21 +105,22 @@ const Kino = ({ match }) => {
   };
 
   return (
-    <Fragment>
+    <div class='container'>
       {!loading ? (
-        <div className=''>
-          <div className=''>
+        <div className='text-white row mt-3 align-items-center'>
+          <div className='col-5 text-align-center'>
             <img
               src={`https://image.tmdb.org/t/p/w500/` + poster_path}
               alt={title}
+              class='big-image'
               srcset=''
             />
           </div>
-          <div className=''>
-            <h1>{title}</h1>
-            <h3>Release Date: {release_date}</h3>
-            <h3>Running Time: {runtime} mins</h3>
-            <h4>{overview}</h4>
+          <div className='col-5 text-align-start'>
+            <h2 class='cursive-glow-txt mb-3'>{title}</h2>
+            <p>Release Date: {release_date}</p>
+            <p>Running Time: {runtime} mins</p>
+            <p>{overview}</p>
           </div>
         </div>
       ) : (
@@ -123,13 +128,14 @@ const Kino = ({ match }) => {
       )}
 
       {isAuthenticated && !userHasReview ? (
-        <div className='form-container'>
+        <div className='form-container text-white'>
           <form onSubmit={onSubmit}>
             <div className='form-group'>
               <label htmlFor='rating'>Rating: </label>
               <input
                 type='number'
                 name='rating'
+                class='form-control'
                 value={rating}
                 onChange={onChange}
                 min='0'
@@ -143,6 +149,7 @@ const Kino = ({ match }) => {
               <input
                 type='text'
                 name='review_title'
+                class='form-control'
                 value={review_title}
                 onChange={onChange}
               />
@@ -152,6 +159,7 @@ const Kino = ({ match }) => {
               <textarea
                 name='review_body'
                 value={review_body}
+                class='form-control'
                 onChange={onChange}
                 cols='30'
                 rows='10'
@@ -159,18 +167,22 @@ const Kino = ({ match }) => {
               ></textarea>
             </div>
 
-            <input type='submit' value='submit' />
+            <input type='submit' value='submit' class='btn btn-primary' />
           </form>
         </div>
       ) : (
         ''
       )}
 
-      <div className='reviews-container'>
-        {userReview ? <ReviewItem review={userReview} /> : 'No Review'}
-        <Reviews movieId={match.params.movie} />
+      <div className='container px-5'>
+        {userHasReview && isAuthenticated ? (
+          <ReviewItem review={userReview} needPic={true} />
+        ) : (
+          ''
+        )}
+        <Reviews movieId={match.params.movie} needPic={true} />
       </div>
-    </Fragment>
+    </div>
   );
 };
 

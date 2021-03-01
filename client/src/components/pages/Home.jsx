@@ -11,8 +11,9 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
+    <div class='text-white'>
       <Kinos />
+      <h1 class='m-5 cursive-glow-txt'>Recent Reviews</h1>
       <Reviews />
     </div>
   );

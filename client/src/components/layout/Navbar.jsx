@@ -6,16 +6,16 @@ import SearchBar from './SearchBar';
 const Navbar = () => {
   const authContext = useContext(AuthContext);
 
-  const { isAuthenticated, logout, user } = authContext;
+  const { isAuthenticated, logout, user, loading } = authContext;
 
   const username = user && user.username;
 
   const authLinks = (
     <Fragment>
       <li>
-        <Link to={`/u/${username}`} className='links'>
+        <a href={`/u/${username}`} className='links'>
           {username}
-        </Link>
+        </a>
       </li>
       <li>
         <a onClick={logout} href='/' className='links'>
@@ -40,13 +40,34 @@ const Navbar = () => {
     </Fragment>
   );
 
+  const loadingLinks = (
+    <Fragment>
+      <li>
+        <Link to='/' className='links'>
+          <i className='fas fa-spinner'></i>
+        </Link>
+      </li>
+      <li>
+        <Link to='/' className='links'>
+          <i className='fas fa-spinner'></i>
+        </Link>
+      </li>
+    </Fragment>
+  );
+
   return (
-    <div className='navbar'>
-      <h1 className='logo-text'>
-        <Link to='/'>Kino</Link>
+    <div className='nav navbar'>
+      <h1>
+        <a href='/' class='logo_text'>
+          Kino
+        </a>
       </h1>
       <SearchBar />
-      <ul>{isAuthenticated ? authLinks : guestLinks}</ul>
+      {!loading ? (
+        <ul>{isAuthenticated ? authLinks : guestLinks}</ul>
+      ) : (
+        loadingLinks
+      )}
     </div>
   );
 };

@@ -2,9 +2,10 @@ import React, { useState, useEffect, useContext, Fragment } from 'react';
 import ReviewItem from './ReviewItem';
 import Spinner from '../layout/Spinner';
 import AuthContext from '../../context/auth/authContext';
-import axios from 'axios';
 
-const Reviews = ({ movieId, needPic }) => {
+import * as API from '../../api';
+
+const Reviews = ({ movieId, needPic, userReviews }) => {
   const [loading, setLoading] = useState(false);
   const [reviews, setReviews] = useState([]);
   const authContext = useContext(AuthContext);
@@ -19,24 +20,21 @@ const Reviews = ({ movieId, needPic }) => {
       let data;
 
       if (movieId) {
-        const res = await axios.get(`/api/reviews/m/${movieId}`);
+        const res = await API.getMovieReviews(movieId);
         if (isAuthenticated) {
           const username = user && user.username;
-          const temp = res.data;
-          data = [];
+          data = res.data;
 
-          temp.forEach((userReview) => {
-            if (userReview.username !== username) data.push(userReview);
-          });
+          data = data.filter((review) => review.username !== username);
         } else {
           data = res.data;
         }
-      } else if (user) {
-        const res = await fetch(`/api/reviews/u/${user}`);
-        data = res.json();
+      } else if (userReviews) {
+        const res = await API.getUserReviews(userReviews);
+        data = res.data;
       } else {
-        const res = await fetch(`/api/reviews`);
-        data = await res.json();
+        const res = await API.getRecentReviews();
+        data = res.data;
       }
 
       setReviews(data);
@@ -44,7 +42,7 @@ const Reviews = ({ movieId, needPic }) => {
     };
 
     fetchAPI();
-  }, []);
+  }, [user]);
 
   return (
     <Fragment>

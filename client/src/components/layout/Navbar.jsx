@@ -13,14 +13,14 @@ const Navbar = () => {
   const authLinks = (
     <Fragment>
       <li>
-        <a href={`/u/${username}`} className='links'>
+        <Link to={`/u/${username}`} className='links'>
           {username}
-        </a>
+        </Link>
       </li>
       <li>
-        <a onClick={logout} href='/' className='links'>
+        <Link onClick={logout} to='/' className='links'>
           Logout
-        </a>
+        </Link>
       </li>
     </Fragment>
   );
@@ -58,7 +58,7 @@ const Navbar = () => {
   return (
     <div className='nav navbar'>
       <h1>
-        <a href='/' class='logo_text'>
+        <a href='/' className='logo_text'>
           Kino
         </a>
       </h1>

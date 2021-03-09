@@ -1,34 +1,30 @@
-import React, { useState, useEffect, useContext, Fragment } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import AuthContext from '../../context/auth/authContext';
 import Reviews from '../review/Reviews';
 import ReviewItem from '../review/ReviewItem';
 import Spinner from '../layout/Spinner';
-import axios from 'axios';
+
+import * as API from '../../api';
 
 const Kino = ({ match }) => {
   const [loading, setLoading] = useState(false);
   const [kino, setKino] = useState({});
   const [userReview, setUserReview] = useState({});
   const [userHasReview, setUserHasReview] = useState(false);
+  const [userReviewLoading, setUserReviewLoading] = useState(false);
+  const [kinoRating, setKinoRating] = useState(0);
 
   const authContext = useContext(AuthContext);
-  const { isAuthenticated, loadUser } = authContext;
+  const { isAuthenticated } = authContext;
 
   const { title, release_date, poster_path, overview, runtime } = kino;
-
-  useEffect(() => {
-    loadUser();
-  }, []);
 
   useEffect(() => {
     // api request for individual movie
     const fetchMovieInfo = async () => {
       setLoading(true);
 
-      const res = await fetch(
-        `https://api.themoviedb.org/3/movie/${match.params.movie}?api_key=e303bacd98bdfe6244014f8c8f687ec9`
-      );
-
+      const res = await API.getMovieInfo(match.params.movie);
       const data = await res.json();
 
       setKino(data);
@@ -41,11 +37,10 @@ const Kino = ({ match }) => {
 
   useEffect(() => {
     const fetchUserReview = async () => {
+      setUserReviewLoading(true);
       try {
         if (isAuthenticated) {
-          const response = await axios.get(
-            `/api/reviews/mu/${match.params.movie}`
-          );
+          const response = await API.getUserMovieReview(match.params.movie);
           if (response.status === 200) {
             const review = response.data;
 
@@ -56,10 +51,22 @@ const Kino = ({ match }) => {
       } catch (err) {
         console.log(err);
       }
+      setUserReviewLoading(false);
     };
 
     fetchUserReview();
-  }, []);
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    const fetchKinoRating = async () => {
+      const {
+        data: { rating },
+      } = await API.getKinoRating(match.params.movie);
+
+      setKinoRating(rating);
+    };
+    fetchKinoRating();
+  });
 
   const [review, setReview] = useState({
     rating: 0,
@@ -86,21 +93,13 @@ const Kino = ({ match }) => {
   };
 
   const submitReview = async (formData) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
     try {
-      const res = await axios.post('/api/reviews', formData, config);
-
-      const data = res.data;
+      const { data } = await API.submitReview(formData);
 
       setUserReview(data);
       setUserHasReview(true);
     } catch (err) {
-      console.log(err.response.data.msg);
+      console.log(err);
     }
   };
 
@@ -120,6 +119,10 @@ const Kino = ({ match }) => {
             <h2 class='cursive-glow-txt mb-3'>{title}</h2>
             <p>Release Date: {release_date}</p>
             <p>Running Time: {runtime} mins</p>
+            <p>
+              <i className='fas fa-star text-warning'></i>{' '}
+              {kinoRating.toFixed(2)}
+            </p>
             <p>{overview}</p>
           </div>
         </div>
@@ -127,7 +130,7 @@ const Kino = ({ match }) => {
         <Spinner />
       )}
 
-      {isAuthenticated && !userHasReview ? (
+      {isAuthenticated && !userHasReview && !userReviewLoading ? (
         <div className='form-container text-white'>
           <form onSubmit={onSubmit}>
             <div className='form-group'>
@@ -175,7 +178,7 @@ const Kino = ({ match }) => {
       )}
 
       <div className='container px-5'>
-        {userHasReview && isAuthenticated ? (
+        {isAuthenticated && userHasReview ? (
           <ReviewItem review={userReview} needPic={true} />
         ) : (
           ''

@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import KinoItem from './KinoItem';
 import Spinner from '../layout/Spinner';
 
+import * as API from '../../api';
+import axios from 'axios';
+
 const Kinos = () => {
   const [loading, setLoading] = useState(false);
   const [kinos, setKinos] = useState([]);
@@ -11,10 +14,7 @@ const Kinos = () => {
     const fetchAPI = async () => {
       setLoading(true);
 
-      const res = await fetch(
-        'https://api.themoviedb.org/3/movie/popular?api_key=e303bacd98bdfe6244014f8c8f687ec9'
-      );
-
+      const res = await API.getPopularMovies();
       const data = await res.json();
 
       setKinos(data.results);
@@ -26,7 +26,7 @@ const Kinos = () => {
 
   return (
     <div>
-      {!loading ? (
+      {!loading && kinos.length > 0 ? (
         <div id='main'>
           {kinos.map((kino) => (
             <KinoItem kino={kino} key={kino.id} />

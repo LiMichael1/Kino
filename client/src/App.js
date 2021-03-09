@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Home from './components/pages/Home';
@@ -9,6 +9,7 @@ import Login from './components/auth/Login';
 import Kino from './components/kino/Kino';
 import User from './components/pages/User';
 import Alerts from './components/layout/Alerts';
+import LoadUser from './components/layout/LoadUser';
 
 import AuthState from './context/auth/AuthState';
 import AlertState from './context/alert/AlertState';
@@ -25,7 +26,7 @@ const App = () => {
     <AuthState>
       <AlertState>
         <Router>
-          <Fragment>
+          <LoadUser>
             <Navbar />
             <Alerts />
             <Switch>
@@ -37,7 +38,7 @@ const App = () => {
               <Route exact path='/u/:username' component={User} />
             </Switch>
             {/* <Footer /> */}
-          </Fragment>
+          </LoadUser>
         </Router>
       </AlertState>
     </AuthState>

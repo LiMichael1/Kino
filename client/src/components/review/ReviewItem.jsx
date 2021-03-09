@@ -17,8 +17,6 @@ const ReviewItem = ({
   },
   needPic,
 }) => {
-  console.log(needPic);
-
   return (
     <div class='row review text-white'>
       {!needPic ? (

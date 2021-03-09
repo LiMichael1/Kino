@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const url = 'https://image.tmdb.org/t/p/w500/';
 
@@ -18,25 +19,29 @@ const ReviewItem = ({
   needPic,
 }) => {
   return (
-    <div class='row review text-white'>
+    <div className='row review text-white'>
       {!needPic ? (
-        <div class='col-4 review-header'>
-          <img src={url + poster_path} alt={movie_name} class='review-img' />
+        <div className='col-4 review-header'>
+          <img
+            src={url + poster_path}
+            alt={movie_name}
+            className='review-img'
+          />
           <p>
-            <a href={`/m/${movieId}`}>{movie_name}</a>
+            <Link to={`/m/${movieId}`}>{movie_name}</Link>
           </p>
         </div>
       ) : (
         ''
       )}
 
-      <div class='col-8 review-info'>
+      <div className='col-8 review-info'>
         <h3>{text_header}</h3>
         <p>
           User:{'   '}
-          <a class='cursive-glow-txt' href={`u/${username}`}>
+          <Link className='cursive-glow-txt' to={`../u/${username}`}>
             {username}
-          </a>
+          </Link>
         </p>
         <p>
           <i className='fas fa-star text-warning'></i>

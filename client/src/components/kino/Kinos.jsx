@@ -4,7 +4,6 @@ import KinoItem from './KinoItem';
 import Spinner from '../layout/Spinner';
 
 import * as API from '../../api';
-import axios from 'axios';
 
 const Kinos = () => {
   const [loading, setLoading] = useState(false);
@@ -26,7 +25,7 @@ const Kinos = () => {
 
   return (
     <div>
-      {!loading && kinos.length > 0 ? (
+      {!loading && kinos && kinos.length > 0 ? (
         <div id='main'>
           {kinos.map((kino) => (
             <KinoItem kino={kino} key={kino.id} />

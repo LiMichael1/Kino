@@ -8,7 +8,7 @@ const KinoItem = ({ kino: { poster_path, title, id } }) => {
   return (
     <div className='kino'>
       <Link to={`/m/${id}`}>
-        <img src={url + poster_path} alt={title} class='kino-img' />
+        <img src={url + poster_path} alt={title} className='kino-img' />
         <div className='after'>
           <p>{title}</p>
         </div>

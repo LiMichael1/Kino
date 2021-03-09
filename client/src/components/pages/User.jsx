@@ -6,8 +6,8 @@ const User = ({ match }) => {
   const username = match.params.username;
 
   return (
-    <div class='text-white'>
-      <h1 class='cursive-glow-txt m-3'>{username}</h1>
+    <div className='text-white'>
+      <h1 className='cursive-glow-txt m-3'>{username}</h1>
       <Reviews userReviews={username} />
     </div>
   );

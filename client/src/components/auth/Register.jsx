@@ -18,7 +18,7 @@ const Register = (props) => {
       setAlert(error, 'danger');
       clearErrors();
     }
-  }, [isAuthenticated, error, props.history]);
+  }, [isAuthenticated, error, clearErrors, setAlert, props.history]);
 
   const [user, setUser] = useState({
     username: '',
@@ -104,7 +104,7 @@ const Register = (props) => {
             <div className='form-group'>
               <input
                 type='submit'
-                value='Login'
+                value='Register'
                 className='btn btn-primary d-block form-button'
               />
 

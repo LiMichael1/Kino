@@ -1,16 +1,12 @@
-import React, { useState, useEffect, useContext, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import ReviewItem from './ReviewItem';
 import Spinner from '../layout/Spinner';
-import AuthContext from '../../context/auth/authContext';
 
 import * as API from '../../api';
 
-const Reviews = ({ movieId, needPic, userReviews }) => {
+const Reviews = ({ kino, needPic, userReviews }) => {
   const [loading, setLoading] = useState(false);
   const [reviews, setReviews] = useState([]);
-  const authContext = useContext(AuthContext);
-
-  const { isAuthenticated, user } = authContext;
 
   // API FETCH
   useEffect(() => {
@@ -19,16 +15,8 @@ const Reviews = ({ movieId, needPic, userReviews }) => {
 
       let data;
 
-      if (movieId) {
-        const res = await API.getMovieReviews(movieId);
-        if (isAuthenticated) {
-          const username = user && user.username;
-          data = res.data;
-
-          data = data.filter((review) => review.username !== username);
-        } else {
-          data = res.data;
-        }
+      if (kino) {
+        data = kino;
       } else if (userReviews) {
         const res = await API.getUserReviews(userReviews);
         data = res.data;
@@ -42,7 +30,7 @@ const Reviews = ({ movieId, needPic, userReviews }) => {
     };
 
     fetchAPI();
-  }, [user]);
+  }, [kino, userReviews]);
 
   return (
     <Fragment>

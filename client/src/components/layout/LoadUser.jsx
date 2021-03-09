@@ -2,10 +2,10 @@ import React, { Fragment, useEffect, useContext } from 'react';
 import AuthContext from '../../context/auth/authContext';
 
 const LoadUser = (props) => {
-  const authContext = useContext(AuthContext);
+  const { loadUser } = useContext(AuthContext);
 
   useEffect(() => {
-    authContext.loadUser();
+    loadUser();
   }, []);
 
   return <Fragment>{props.children}</Fragment>;

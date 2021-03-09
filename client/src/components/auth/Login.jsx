@@ -17,7 +17,7 @@ const Login = (props) => {
       setAlert(error, 'danger');
       clearErrors();
     }
-  }, [isAuthenticated, error, props.history]);
+  }, [isAuthenticated, error, clearErrors, props.history]);
 
   const [user, setUser] = useState({
     email: '',
@@ -86,7 +86,7 @@ const Login = (props) => {
               />
 
               <a href='/register' className='btn btn-link text-md-left'>
-                Forgot Your Password?
+                Don't have an account?
               </a>
             </div>
           </form>

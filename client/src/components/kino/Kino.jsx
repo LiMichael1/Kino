@@ -1,72 +1,32 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AuthContext from '../../context/auth/authContext';
+import KinoContext from '../../context/kino/kinoContext';
 import Reviews from '../review/Reviews';
 import ReviewItem from '../review/ReviewItem';
 import Spinner from '../layout/Spinner';
 
-import * as API from '../../api';
-
 const Kino = ({ match }) => {
-  const [loading, setLoading] = useState(false);
-  const [kino, setKino] = useState({});
-  const [userReview, setUserReview] = useState({});
-  const [userHasReview, setUserHasReview] = useState(false);
-  const [userReviewLoading, setUserReviewLoading] = useState(false);
-  const [kinoRating, setKinoRating] = useState(0);
-
   const authContext = useContext(AuthContext);
-  const { isAuthenticated } = authContext;
+  const { isAuthenticated, user } = authContext;
+
+  const kinoContext = useContext(KinoContext);
+  const {
+    kino,
+    userReview,
+    kinoRating,
+    kinoReviews,
+    loading,
+    userHasReview,
+    userReviewLoading,
+    getMovieInfo,
+    submitReview,
+  } = kinoContext;
 
   const { title, release_date, poster_path, overview, runtime } = kino;
 
   useEffect(() => {
-    // api request for individual movie
-    const fetchMovieInfo = async () => {
-      setLoading(true);
-
-      const res = await API.getMovieInfo(match.params.movie);
-      const data = await res.json();
-
-      setKino(data);
-
-      setLoading(false);
-    };
-
-    fetchMovieInfo();
-  }, []);
-
-  useEffect(() => {
-    const fetchUserReview = async () => {
-      setUserReviewLoading(true);
-      try {
-        if (isAuthenticated) {
-          const response = await API.getUserMovieReview(match.params.movie);
-          if (response.status === 200) {
-            const review = response.data;
-
-            setUserReview(review);
-            setUserHasReview(true);
-          }
-        }
-      } catch (err) {
-        console.log(err);
-      }
-      setUserReviewLoading(false);
-    };
-
-    fetchUserReview();
-  }, [isAuthenticated]);
-
-  useEffect(() => {
-    const fetchKinoRating = async () => {
-      const {
-        data: { rating },
-      } = await API.getKinoRating(match.params.movie);
-
-      setKinoRating(rating);
-    };
-    fetchKinoRating();
-  });
+    getMovieInfo(parseInt(match.params.movie), isAuthenticated, user);
+  }, [match.params.movie, user]);
 
   const [review, setReview] = useState({
     rating: 0,
@@ -92,36 +52,26 @@ const Kino = ({ match }) => {
     });
   };
 
-  const submitReview = async (formData) => {
-    try {
-      const { data } = await API.submitReview(formData);
-
-      setUserReview(data);
-      setUserHasReview(true);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
-    <div class='container'>
+    <div className='container'>
       {!loading ? (
         <div className='text-white row mt-3 align-items-center'>
-          <div className='col-5 text-align-center'>
+          <div className='w-50 text-align-center'>
             <img
-              src={`https://image.tmdb.org/t/p/w500/` + poster_path}
+              src={
+                poster_path && `https://image.tmdb.org/t/p/w500/` + poster_path
+              }
               alt={title}
-              class='big-image'
-              srcset=''
+              className='big-image'
             />
           </div>
-          <div className='col-5 text-align-start'>
-            <h2 class='cursive-glow-txt mb-3'>{title}</h2>
+          <div className='w-50 text-align-start'>
+            <h2 className='cursive-glow-txt mb-3'>{title}</h2>
             <p>Release Date: {release_date}</p>
             <p>Running Time: {runtime} mins</p>
             <p>
               <i className='fas fa-star text-warning'></i>{' '}
-              {kinoRating.toFixed(2)}
+              {kinoRating ? kinoRating.toFixed(2) : 0}
             </p>
             <p>{overview}</p>
           </div>
@@ -133,12 +83,12 @@ const Kino = ({ match }) => {
       {isAuthenticated && !userHasReview && !userReviewLoading ? (
         <div className='form-container text-white'>
           <form onSubmit={onSubmit}>
-            <div className='form-group'>
+            <div className='form-group w-25'>
               <label htmlFor='rating'>Rating: </label>
               <input
                 type='number'
                 name='rating'
-                class='form-control'
+                className='form-control'
                 value={rating}
                 onChange={onChange}
                 min='0'
@@ -152,7 +102,7 @@ const Kino = ({ match }) => {
               <input
                 type='text'
                 name='review_title'
-                class='form-control'
+                className='form-control'
                 value={review_title}
                 onChange={onChange}
               />
@@ -162,7 +112,7 @@ const Kino = ({ match }) => {
               <textarea
                 name='review_body'
                 value={review_body}
-                class='form-control'
+                className='form-control'
                 onChange={onChange}
                 cols='30'
                 rows='10'
@@ -170,7 +120,7 @@ const Kino = ({ match }) => {
               ></textarea>
             </div>
 
-            <input type='submit' value='submit' class='btn btn-primary' />
+            <input type='submit' value='submit' className='btn btn-primary' />
           </form>
         </div>
       ) : (
@@ -183,7 +133,7 @@ const Kino = ({ match }) => {
         ) : (
           ''
         )}
-        <Reviews movieId={match.params.movie} needPic={true} />
+        <Reviews kino={kinoReviews} needPic={true} />
       </div>
     </div>
   );

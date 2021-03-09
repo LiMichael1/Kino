@@ -9,7 +9,7 @@ import {
   CLEAR_ERRORS,
 } from '../types';
 
-export default (state, action) => {
+const reducer = (state, action) => {
   switch (action.type) {
     case USER_LOADED:
       return {
@@ -53,3 +53,5 @@ export default (state, action) => {
       return state;
   }
 };
+
+export default reducer;

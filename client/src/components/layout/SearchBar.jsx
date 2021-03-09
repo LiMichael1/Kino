@@ -1,14 +1,24 @@
-import React, { useState, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import * as API from '../../api';
 
 const url = 'https://image.tmdb.org/t/p/w500/';
 
 const SearchBar = () => {
-  const [search, setSearch] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [search, setSearch] = useState('');
+  const [hideResults, setHideResults] = useState(false);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    setHideResults(true);
+  }, [location]);
 
   const onChange = (e) => {
-    searchMovie(e.target.value);
+    setSearch(e.target.value);
+    searchMovie(search);
+    setHideResults(false);
   };
 
   const searchMovie = async (movie) => {
@@ -16,35 +26,36 @@ const SearchBar = () => {
     const data = await res.json();
 
     const results = data.results;
-    setSearch(results);
+    setSearchResults(results);
   };
 
   return (
-    <div class='autocomplete'>
+    <div className='autocomplete'>
       <form id='search-bar'>
         <input
           type='text'
           name='search'
           id='search'
-          class='form-control'
+          value={search}
+          className='form-control'
           onChange={onChange}
           placeholder='Search'
           autoComplete='off'
         />
       </form>
       <div className='autocomplete-content'>
-        {search
-          ? search.map((s, idx) => {
+        {searchResults && !hideResults
+          ? searchResults.map((s, idx) => {
               return (
                 <div>
-                  <a href={`/m/${s.id}`} class='row'>
+                  <Link to={`/m/${s.id}`} class='row'>
                     <img
                       src={url + s.poster_path}
                       alt=''
-                      class='col-5 search_result_img'
+                      className='col-5 search_result_img'
                     />
-                    <p class='col-5 justify-content-center'>{s.title}</p>
-                  </a>
+                    <p className='col-5 justify-content-center'>{s.title}</p>
+                  </Link>
                 </div>
               );
             })
